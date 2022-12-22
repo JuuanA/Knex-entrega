@@ -5,6 +5,7 @@ import { engine } from "express-handlebars";
 import router from "./routes/index.js";
 import { Server as IOServer } from "socket.io";
 import Contenedor from "./api.js";
+import moment from "moment";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -69,7 +70,7 @@ io.on("connection", async (socket) => {
   socket.emit("server:product", await productApi.getAll());
 
   socket.on("client:message", async (messageInfo) => {
-    await messageApi.save({ ...messageInfo, time: Date.now() });
+    await messageApi.save({ ...messageInfo, time: moment().format('MMMM Do YYYY, h:mm:ss a')});
     io.emit("server:message", await messageApi.getAll());
   });
 
